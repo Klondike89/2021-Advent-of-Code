@@ -19,21 +19,6 @@ with open(f,'r') as file:
 oxy = full.copy()
 co2 = full.copy()
 
-# for char in range(len(full)):
-#     O = 0
-#     I = 0
-#     if full[char][0] == '0':
-#         O += 1
-#     elif full[char][0] == '1':
-#         I += 1
-# if O > I:
-#     oxy = list_zero.copy()
-#     co2 = list_one.copy()
-# elif I > O:
-#     oxy = list_one.copy()
-#     co2 = list_zero.copy()
-
-
 for pos in range(len(oxy[0])):
     O = 0
     I = 0
@@ -112,10 +97,10 @@ for pos in range(len(co2[0])):
             break
    
 
-print("Final Oxy: " + oxy[0])
-print("Final Co2: " + co2[0])
+# print("Final Oxy: " + oxy[0])
+# print("Final Co2: " + co2[0])
 oxygen = int(oxy[0],2)
 carbon = int(co2[0],2)
-print(oxygen)
-print(carbon)
+# print(oxygen)
+# print(carbon)
 print(oxygen*carbon)
