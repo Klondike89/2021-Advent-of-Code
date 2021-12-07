@@ -33,7 +33,9 @@ def mark_called(value,num):
     column.append(board[char][pos])
 
 winner = []
+last_call = 0
 for num in called_numbers:
+    last_call = int(num)
     for board in all_boards:
         for pos in range(len(board[0])):
             column.clear()
@@ -52,8 +54,8 @@ for num in called_numbers:
                             if vert_count == len(board):
                                 for line in board:
                                     winner.append(line)
-                                    print(line)
-                                print("Bingo!")
+                                #     print(line)
+                                # print("Bingo!")
                                 found = True
                     for line in board:
                         horz_count = 0
@@ -64,8 +66,8 @@ for num in called_numbers:
                                 horz_count += 1
                                 if horz_count == len(board):
                                     winner.append(board)
-                                    print(board)
-                                    print("BINGO!")
+                                    # print(board)
+                                    # print("BINGO!")
                                     found = True
                     if found == True:
                         break
@@ -79,12 +81,10 @@ for num in called_numbers:
         break
 
 
-
-
-    
-
-
-
+uncalled_spots = []
 for line in winner:
-    print(line)
-print('\n')
+    for spot in line:
+        if spot.isdigit():
+            uncalled_spots.append(int(spot))
+        
+print(sum(uncalled_spots)* last_call)
