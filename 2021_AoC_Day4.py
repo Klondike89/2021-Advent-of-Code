@@ -3,52 +3,88 @@ from pdb import set_trace as bp
 f = r'C:\Users\brian\Documents\GitHub\2021-Advent-of-Code\2021_AoC_Day4_input.txt'
 
 board_line = int(1)
-a = []
-b = []
-c = []
-d = []
-e = []
+board = []
 all_boards = []
+column = []
 
-def build_board(board_line):
-    if board_line == 1:
-        a.append(line.split(' '))
-    elif board_line == 2:
-        b.append(line.split(' '))
-    elif board_line == 3:
-        c.append(line.split(' '))
-    elif board_line == 4:
-        d.append(line.split(' '))
-    elif board_line == 5:
-        e.append(line.split(' '))
+vert_count = 0
+horz_count = 0
+found = False
 
 def create_board(name):
-    name = [a.copy(),b.copy(),c.copy(),d.copy(),e.copy()]
+    name = board.copy()
     all_boards.append(name)
-
-def clear_lines():
-    a.clear()
-    b.clear()
-    c.clear()
-    d.clear()
-    e.clear()
+    board.clear()
 
 with open(f,'r') as file:
-    called_numbers = file.readline()
+    called_numbers = file.readline().strip()
+    called_numbers = called_numbers.split(',')
     for line in file:
-        # print(all_boards); print(board_line); print(line); bp()
         if line != '\n':
-            line = line.strip('\n')
-            build_board(board_line)
-            board_line +=1
-            # print(all_boards); print(board_line); print(line); bp()
+           board.append(line.split())
         else:
-            if a != all_boards:
-                board_line = int(1)
+            if board != all_boards:
                 create_board(line)
-                clear_lines()
-                # print(all_boards); print(board_line); print(line); bp()
+
+def mark_called(value,num):
+    if value == num:
+        # board[char][pos] = 'XX' ### TAKE THIS OUT!
+        board[char][pos] = value+'c'#### PUT THIS BACK IN
+    column.append(board[char][pos])
+
+winner = []
+for num in called_numbers:
+    for board in all_boards:
+        for pos in range(len(board[0])):
+            column.clear()
+            for char in range(len(board)):
+                value = board[char][pos]
+                
+                mark_called(value,num)
+
+                if len(column) == len(board):
+                    vert_count = 0
+                    for space in column:
+                        if space.isdigit():
+                            pass
+                        else:
+                            vert_count += 1
+                            if vert_count == len(board):
+                                for line in board:
+                                    winner.append(line)
+                                    print(line)
+                                print("Bingo!")
+                                found = True
+                    for line in board:
+                        horz_count = 0
+                        for space in line:
+                            if space.isdigit():
+                                pass
+                            else:
+                                horz_count += 1
+                                if horz_count == len(board):
+                                    winner.append(board)
+                                    print(board)
+                                    print("BINGO!")
+                                    found = True
+                    if found == True:
+                        break
+                if found == True:
+                    break
+            if found == True:
+                break
+        if found == True:
+            break
+    if found == True:
+        break
 
 
-for board in all_boards:
-    print(board)
+
+
+    
+
+
+
+for line in winner:
+    print(line)
+print('\n')
