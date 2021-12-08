@@ -13,11 +13,25 @@ with open(f,'r') as file:
 
 board_indexes = [x for x in range(len(boards))]
 winners = []
-num_index = 0
 found_first = False
 found_all = False
 found_any = False
 
+""" Update board by replacing drawn number with '100' """
+def update_boards(board):
+        if num in board:
+            x = board.index(num)
+            board[x] = 100
+
+""" Calculate total value of all uncalled values on board then multiply by drawn number """
+def board_total(board):
+    larry = [x for x in board if x != 100]
+    print(larry)
+    print(num)
+    total = sum(larry)*num
+    print(total)
+
+""" Define what a win looks like """
 def is_win_case(board):
     i = 0
     while i <= 20:
@@ -30,46 +44,22 @@ def is_win_case(board):
             return True
         i += 1
 
-
-def update_boards(board):
-        if num in board:
-            x = board.index(num)
-            board[x] = 100
-
-def board_total(board):
-    larry = [x for x in board if x != 100]
-    print(larry)
-    print(num)
-    total = sum(larry)*num
-    print(total)
-
-while not found_all:
-    num = called_numbers[num_index]
-    b_index_count = 0
-    # print('num: ' + str(num_index))
-    # print('len: ' + str(len(winners)))
-    # print('winners: ' + str(board_indexes))
-    for b_index_count in board_indexes:
-        board = boards[int(b_index_count)]
+while found_all == False:
+    num = called_numbers[0]
+    called_numbers = called_numbers[1:]
+    for index in range(len(boards)):
+        board = boards[index]
         update_boards(board)
-        
-        if is_win_case(board):
-            board_indexes.remove(b_index_count)
-            if not found_first:
-                board_total(board)
-                found_first = True
-            
-            elif len(board_indexes) == 0 or len(board_indexes) < 5:
-                print(num)
-                print(b_index_count)
-                print(board_indexes)
-                for x in range(0,5):
-                    x = x*5
-                    print(board[x:x+5])
-                board_total(board)
-                #found_all = True
-            b_index_count -= 1    
-            #bp()
-        b_index_count += 1
-    num_index += 1
-                
+    play_index = 0
+    while play_index < len(boards):
+        # print(len(boards))
+        # print(boards)
+        if is_win_case(boards[play_index]):
+            if len(boards) > 1:
+                boards.pop(play_index)
+            else:
+                found_all = True
+        else:
+            play_index += 1
+    print(play_index)
+print(boards)
