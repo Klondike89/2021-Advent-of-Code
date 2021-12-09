@@ -11,11 +11,13 @@ vert_count = 0
 horz_count = 0
 found = False
 
+""" Define How to Build Boards and then add Board to list of All_Boards """
 def create_board(name):
     name = board.copy()
     all_boards.append(name)
     board.clear()
 
+""" Open File and create needed lists """
 with open(f,'r') as file:
     called_numbers = file.readline().strip()
     called_numbers = called_numbers.split(',')
@@ -26,24 +28,27 @@ with open(f,'r') as file:
             if board != all_boards:
                 create_board(line)
 
+""" How to mark spots on board as called """
 def mark_called(value,num):
     if value == num:
-        # board[char][pos] = 'XX' ### TAKE THIS OUT!
-        board[char][pos] = value+'c'#### PUT THIS BACK IN
+        board[char][pos] = value+'c'
     column.append(board[char][pos])
 
 winner = []
 last_call = 0
+# Call a number
 for num in called_numbers:
     last_call = int(num)
+# Go through each Board
     for board in all_boards:
+# Iterate through board going down through each column
         for pos in range(len(board[0])):
             column.clear()
             for char in range(len(board)):
                 value = board[char][pos]
-                
+# Mark values if qualify               
                 mark_called(value,num)
-
+# Check columns for win case
                 if len(column) == len(board):
                     vert_count = 0
                     for space in column:
@@ -52,11 +57,9 @@ for num in called_numbers:
                         else:
                             vert_count += 1
                             if vert_count == len(board):
-                                for line in board:
-                                    winner.append(line)
-                                #     print(line)
-                                # print("Bingo!")
+                                winner.append(board)
                                 found = True
+# Check lines for win case
                     for line in board:
                         horz_count = 0
                         for space in line:
@@ -66,9 +69,8 @@ for num in called_numbers:
                                 horz_count += 1
                                 if horz_count == len(board):
                                     winner.append(board)
-                                    # print(board)
-                                    # print("BINGO!")
                                     found = True
+# Break out of all loops when finished
                     if found == True:
                         break
                 if found == True:
@@ -82,9 +84,12 @@ for num in called_numbers:
 
 
 uncalled_spots = []
-for line in winner:
-    for spot in line:
-        if spot.isdigit():
-            uncalled_spots.append(int(spot))
-        
+
+for win in winner:
+    for pos in range(len(win[0])):
+        for spot in range(len(win)):
+            square = win[spot][pos]
+            if square.isdigit():
+                uncalled_spots.append(int(square))
+      
 print(sum(uncalled_spots)* last_call)

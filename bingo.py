@@ -13,9 +13,7 @@ with open(f,'r') as file:
 
 board_indexes = [x for x in range(len(boards))]
 winners = []
-found_first = False
 found_all = False
-found_any = False
 
 """ Update board by replacing drawn number with '100' """
 def update_boards(board):
@@ -28,11 +26,11 @@ def board_total(board):
     larry = [x for x in board if x != 100]
     for x in range(5):
         x = x*5
-        print(board[x:x+5])
-    print(larry)
-    print(num)
+    #     print(board[x:x+5])
+    # print(larry)
+    # print(num)
     total = sum(larry)*num
-    print(total)
+    winners.append(total)
 
 """ Define what a win looks like """
 def is_win_case(board):
@@ -68,7 +66,8 @@ while found_all == False:
             #bp()
         else:
             play_index += 1
-    print(len(boards))
+    # print(len(boards))
     #bp()
 
-print(boards)
+print('First Winner: ' + str(winners[0]))
+print('Last Winner: ' + str(winners[-1]))
