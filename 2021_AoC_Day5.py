@@ -4,6 +4,8 @@ f = r'C:\Users\brian\Documents\GitHub\2021-Advent-of-Code\2021_AoC_Day5_input.tx
 
 """ X1,Y1 -> X2,Y2 """
 cord_lines = []
+# x_cords = []
+# y_cords = []
 drawn_lines = {}
 
 with open(f,'r') as file:
@@ -29,18 +31,39 @@ for line_set in cord_lines:
 
         ### Vertical ###
     if start_x == stop_x:
-        for i in range(start_y,stop_y+1):
-            draw_line(str(start_x)+','+str(i))
-        for i in range(stop_y,start_y+1):
-            draw_line(str(start_x)+','+str(i))
-
+        for y in range(start_y,stop_y+1):
+            draw_line(str(start_x)+','+str(y))
+        for y in range(stop_y,start_y+1):
+            draw_line(str(start_x)+','+str(y))
 
         ### Horizontal ###
-    if start_y == stop_y:
-        for i in range(start_x,stop_x+1):
-            draw_line(str(i)+','+str(start_y))
-        for i in range(stop_x,start_x+1):
-            draw_line(str(i)+','+str(start_y))
+    elif start_y == stop_y:
+        for x in range(start_x,stop_x+1):
+            draw_line(str(x)+','+str(start_y))
+        for x in range(stop_x,start_x+1):
+            draw_line(str(x)+','+str(start_y))
+
+        ### Diagonal ###
+    else:
+        x_cords = []
+        y_cords = []
+
+        if start_x > stop_x:
+            for x in range(stop_x,start_x+1):
+                x_cords.append(x)
+        else:
+            for x in range(start_x,stop_x+1):
+                x_cords.insert(0,x)
+
+        if start_y > stop_y:
+            for y in range(stop_y,start_y+1):
+                y_cords.append(y)
+        else:
+            for y in range(start_y,stop_y+1):
+                y_cords.insert(0,y)
+    
+        for cord in range(len(x_cords)):
+            draw_line(str(x_cords[cord])+','+str(y_cords[cord]))
 
 points = [x for x in drawn_lines.values() if x>0]
 print('Number of Overlaps: ' + str(len(points)))
