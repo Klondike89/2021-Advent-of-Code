@@ -1,11 +1,12 @@
 from pdb import set_trace as bp
 
 # Input file 
-f = r'C:\Users\brian\Documents\GitHub\2021-Advent-of-Code\2021_AoC_Day8_TEST_input.txt'
+f = r'C:\Users\brian\Documents\GitHub\2021-Advent-of-Code\2021_AoC_Day8_input.txt'
 
 ##--- Get Data from Input File ---##
 testing_data = []
 data = []
+total = 0
 
 with open(f,'r') as file:
     for line in file:
@@ -23,7 +24,7 @@ for data_set in data:
         if len(node) in unique_segments:
             count += 1
 
-print(count)
+print('Part 1: ' + str(count))
 
 
 ##--- Reference Info ---##
@@ -54,8 +55,7 @@ def Sorting(lst):
     return lst
 
 def Alpha(elmnt):
-    sorted_element_lst = sorted(elmnt)
-    sorted_element = "".join(sorted_element_lst)
+    
     return sorted_element
 
 def contains_set(index):
@@ -73,113 +73,94 @@ for case in range(len(testing_data)):
 
     # Initialize lists for tracking set
     # Take line of data and sort inputs 
-    for node in testing_data:
-        pin_posibilities = [[] for x in range(7)]
-        pin_sets = [set() for y in range(7)]
-        used_pins = []
-        element_name_dict = {'Zero':'',
-                    'One':'',
-                    'Two':'',
-                    'Three':'',
-                    'Four':'',
-                    'Five':'',
-                    'Six':'',
-                    'Seven':'',
-                    'Eight':'',
-                    'Nine':''}
-        Sorting(node)
-        # print(node)
+    testing_node = testing_data[case]
+    pin_posibilities = [[] for x in range(7)]
+    pin_sets = [set() for y in range(7)]
+    used_pins = []
+    element_name_dict = {'Zero':'',
+                'One':'',
+                'Two':'',
+                'Three':'',
+                'Four':'',
+                'Five':'',
+                'Six':'',
+                'Seven':'',
+                'Eight':'',
+                'Nine':''}
+    Sorting(testing_node)
 
-        # Organize each 'input'(element) by counting the pins
-        # then reference Pin_Count_Option_Dict to get 
-        # possible correct displays
-        for element in node:
-            name = 'none'
-            # print(element)
-            pin_count = str(len(element))
-            element_name = Pin_Count_Name_Dict.get(pin_count)
+    # Organize each 'input'(element) by counting the pins
+    # then reference Pin_Count_Option_Dict to get 
+    # possible correct displays
+    for element in testing_node:
+        name = 'none'
+        sorted_element_lst = sorted(element)
+        sorted_element = "".join(sorted_element_lst)
+        pin_count = str(len(sorted_element))
+        element_name = Pin_Count_Name_Dict.get(pin_count)
 
-            # Starting with Ones, Sevens, Fours, Eights
-            # Use process of elimination to find correct pin layout
-            if type(element_name) is str:
-                display_pos = Name_Pin_Dict.get(element_name)
-                if pin_count == '2':
-                    element_name_dict[element_name] = element
-                    for pin in element:
-                        for pos in display_pos:
-                            pin_sets[pos].add(pin)
-                            used_pins.append(pin)
-                elif pin_count == '3':
-                    element_name_dict[element_name] = element
-                    for pin in element:
-                        if pin not in used_pins:
-                            pin_sets[0].add(pin)
-                            pin_sets[0].add('solved')
-                            used_pins.append(pin)
-                elif pin_count == '4':
-                    element_name_dict[element_name] = element
-                    for pin in element:
-                        if pin not in used_pins:
-                            pin_sets[1].add(pin)
-                            pin_sets[3].add(pin)
-                            used_pins.append(pin)
-                else:
-                    element_name_dict[element_name] = element
-
-                
-            
+        # Starting with Ones, Sevens, Fours, Eights
+        # Use process of elimination to find correct pin layout
+        if type(element_name) is str:
+            display_pos = Name_Pin_Dict.get(element_name)
+            if pin_count == '2':
+                element_name_dict[element_name] = sorted_element
+                for pin in sorted_element:
+                    for pos in display_pos:
+                        pin_sets[pos].add(pin)
+                        used_pins.append(pin)
+            elif pin_count == '3':
+                element_name_dict[element_name] = sorted_element
+                for pin in sorted_element:
+                    if pin not in used_pins:
+                        pin_sets[0].add(pin)
+                        pin_sets[0].add('solved')
+                        used_pins.append(pin)
+            elif pin_count == '4':
+                element_name_dict[element_name] = sorted_element
+                for pin in sorted_element:
+                    if pin not in used_pins:
+                        pin_sets[1].add(pin)
+                        pin_sets[3].add(pin)
+                        used_pins.append(pin)
             else:
-                element_set = {x for x in element}
-                if len(element) == 5:
-                    if contains_set(2) and not contains_set(3):
-                        name = 'Three'
-                        element_name_dict[name] = element
-                    elif contains_set(1):
-                        name = 'Five'
-                        element_name_dict[name] = element
-                    else:
-                        name = 'Two'
-                        element_name_dict[name] = element
-                    
-
-                elif len(element) == 6:
-                    if contains_set(2) and contains_set(1):
-                        name = 'Nine'
-                        element_name_dict[name] = element
-                    elif contains_set(1) and not contains_set(2):
-                        name = 'Six'
-                        element_name_dict[name] = element
-                    else:
-                        name = 'Zero'
-                        element_name_dict[name] = element
-
-                # print(element)    
-        print(element_name_dict); bp()
-                # print(name);print(pin_sets);bp()
-                    
-                        
-
-                    # for pin in name_pin_lst:
-                    #     if 'solved' not in pin_sets[pin]:
-                    #         print(pin_sets[pin])
-                    #         if len(pin_sets[pin]) < 2:
-                    #             pin_sets[pin].add(element_set.difference(used_set))
-                    #             used_set.add(element_set.difference(used_set))
-                    #             print(pin_sets[pin],element_set,used_set);bp()
-                    #         if pin_sets[pin].issubset(element_set):
-                    #             print(element_set)
-                    #             print(pin_sets[pin])
-                    #             is_name = True
-                    #         else:
-                    #             is_name = False
-                    #             break
-                   
-
-                    
-
-
-
-
-
+                element_name_dict[element_name] = sorted_element
 
             
+        
+        else:
+            element_set = {x for x in sorted_element}
+            if len(sorted_element) == 5:
+                if contains_set(2) and not contains_set(3):
+                    name = 'Three'
+                    element_name_dict[name] = sorted_element
+                elif contains_set(1):
+                    name = 'Five'
+                    element_name_dict[name] = sorted_element
+                else:
+                    name = 'Two'
+                    element_name_dict[name] = sorted_element
+                
+
+            elif len(sorted_element) == 6:
+                if contains_set(2) and contains_set(1):
+                    name = 'Nine'
+                    element_name_dict[name] = sorted_element
+                elif contains_set(1) and not contains_set(2):
+                    name = 'Six'
+                    element_name_dict[name] = sorted_element
+                else:
+                    name = 'Zero'
+                    element_name_dict[name] = sorted_element
+
+            # print(sorted_element)    
+    numbers = ''
+    numbers_index_lst = [x for x in element_name_dict.values()]
+    # print(numbers_index_lst)
+    for data_point in data[case]:
+        sorted_data_point_lst = sorted(data_point)
+        sorted_data_point= "".join(sorted_data_point_lst)
+        numbers = numbers + str(numbers_index_lst.index(sorted_data_point))
+
+    total = total + int(numbers)
+print('Part 2: ' + str(total))
